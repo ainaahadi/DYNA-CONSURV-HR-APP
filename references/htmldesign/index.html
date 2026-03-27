@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HR Management App</title>
+    <!-- Phosphor Icons for cross-platform neutral iconography -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/global.css">
+    <style>
+        /* Splash/Login Specific Styles */
+        .splash-screen {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--primary-300), var(--primary-700));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .splash-screen .logo-placeholder {
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.2);
+            border-radius: var(--radius-xl);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+            backdrop-filter: blur(10px);
+        }
+
+        .splash-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .login-container {
+            flex: 1;
+            padding: var(--space-xl) var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-header {
+            margin-bottom: var(--space-xl);
+            text-align: center;
+        }
+
+        .input-group i {
+            position: absolute;
+            right: 16px;
+            top: 40px;
+            color: var(--text-tertiary);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .input-group i.left-icon {
+            left: 16px;
+            right: auto;
+            pointer-events: none;
+        }
+
+        .input-field.with-icon {
+            padding-left: 48px;
+        }
+
+        .options-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            color: var(--text-secondary);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: var(--space-xl);
+            color: var(--text-secondary);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+        .shake { animation: shake 0.4s; }
+    </style>
+</head>
+<body>
+
+    <!-- Splash Screen overlay -->
+    <div id="splashScreen" class="splash-screen">
+        <div class="logo-placeholder">
+            <i class="ph-fill ph-users-three" style="font-size: 64px;"></i>
+        </div>
+        <h1 class="display-md mb-md">HR Management</h1>
+        <i class="ph ph-spinner-gap fa-spin" style="font-size: 32px; animation: spin 1s linear infinite;"></i>
+    </div>
+
+    <!-- Login Screen -->
+    <div class="login-container">
+        <div class="login-header">
+            <div style="display: flex; justify-content: center; margin-bottom: var(--space-lg);">
+                <div style="width: 80px; height: 80px; background: var(--primary-500); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                    <i class="ph-fill ph-circles-four" style="font-size: 48px; color: white;"></i>
+                </div>
+            </div>
+            <h1 class="display-lg">Welcome Back</h1>
+            <p class="body-lg text-secondary">Sign in to continue</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <label class="input-label" for="email">Email</label>
+                <i class="ph ph-envelope-simple left-icon"></i>
+                <input type="email" id="email" class="input-field with-icon" value="john.doe@company.com" placeholder="Enter your email" required>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" for="password">Password</label>
+                <i class="ph ph-lock-key left-icon"></i>
+                <input type="password" id="password" class="input-field with-icon" value="password123" placeholder="Enter your password" required minlength="8">
+                <i class="ph ph-eye" id="togglePassword"></i>
+            </div>
+
+            <div class="options-row mb-xl">
+                <label class="checkbox-group">
+                    <input type="checkbox" checked>
+                    <span class="body-md">Remember me</span>
+                </label>
+                <a href="#" class="body-md text-brand" style="text-decoration: none; font-weight: 500;">Forgot Password?</a>
+            </div>
+
+            <button type="submit" id="loginBtn" class="btn btn-primary">
+                SIGN IN
+            </button>
+        </form>
+
+        <p class="signup-link body-md">
+            Don't have an account? <a href="#" class="text-brand" style="font-weight: 600; text-decoration: none;">Sign Up</a>
+        </p>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Inline script to handle splash screen timing
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('splashScreen').classList.add('hidden');
+            }, 2000);
+        });
+    </script>
+    <style>
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</body>
+</html>

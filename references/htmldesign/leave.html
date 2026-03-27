@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Leave Management</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/global.css">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-md) 0;
+            margin-bottom: var(--space-md);
+        }
+
+        .back-btn {
+            font-size: 24px;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        /* Leave Balances Dashboard */
+        .balance-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-sm);
+            margin-bottom: var(--space-xl);
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+            color: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-md) var(--space-xs);
+            text-align: center;
+            box-shadow: var(--shadow-level-1);
+        }
+
+        .balance-card.type-wfh {
+            background: linear-gradient(135deg, #7E57C2, #512DA8);
+        }
+
+        .balance-card.type-mc {
+            background: linear-gradient(135deg, #FF6B6B, #E53935);
+        }
+
+        .balance-card.type-el {
+            background: linear-gradient(135deg, #FFA726, #F57C00);
+        }
+
+        .balance-card.type-cl {
+            background: linear-gradient(135deg, #26C6DA, #0288D1);
+        }
+
+        .balance-card.type-comp {
+            background: linear-gradient(135deg, #8D6E63, #5E35B1);
+        }
+
+        .balance-number {
+            font-size: var(--display-small);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .balance-label {
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        /* Tabs */
+        .tabs-row {
+            display: flex;
+            overflow-x: auto;
+            border-bottom: 1px solid var(--border-subtle);
+            margin-bottom: var(--space-md);
+            scrollbar-width: none;
+        }
+
+        .tabs-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: var(--space-sm) var(--space-md);
+            color: var(--text-secondary);
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all var(--trans-fast);
+        }
+
+        .tab.active {
+            color: var(--primary-500);
+            border-bottom-color: var(--primary-500);
+        }
+
+        /* Leave List */
+        .leave-item {
+            padding: var(--space-md);
+            border-bottom: 1px solid var(--divider);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .leave-item:last-child {
+            border-bottom: none;
+        }
+
+        .leave-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .leave-details {
+            flex: 1;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.pending {
+            background: rgba(255, 167, 38, 0.1);
+            color: var(--warning-500);
+        }
+
+        .status-badge.approved {
+            background: rgba(80, 200, 120, 0.1);
+            color: var(--secondary-500);
+        }
+
+        .status-badge.rejected {
+            background: rgba(239, 83, 80, 0.1);
+            color: var(--error-500);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        /* FAB */
+        .fab {
+            position: fixed;
+            bottom: 80px;
+            right: var(--space-lg);
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-full);
+            background-color: var(--primary-500);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: var(--shadow-level-3);
+            text-decoration: none;
+            transition: transform var(--trans-fast);
+            z-index: 90;
+        }
+
+        .fab:active {
+            transform: scale(0.9);
+        }
+
+        @media (min-width: 500px) {
+            .fab {
+                right: calc(50% - 250px + 24px);
+            }
+
+            /* Keep within max-width container */
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            width: 90%;
+            max-width: 400px;
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-content">
+        <!-- Header -->
+        <header class="page-header">
+            <a href="dashboard.html" class="back-btn"><i class="ph ph-caret-left"></i></a>
+            <h1 class="title-lg">Leave Management</h1>
+            <div style="width:24px"></div> <!-- spacer -->
+        </header>
+
+        <!-- Dynamic Balance Dashboard -->
+        <h3 class="title-sm mb-sm text-secondary">Your Balances (2026)</h3>
+        <div class="balance-board">
+            <div class="balance-card">
+                <div class="balance-number">12</div>
+                <div class="balance-label">AL Left</div>
+            </div>
+            <div class="balance-card type-wfh">
+                <div class="balance-number">03</div>
+                <div class="balance-label">WFH Mth Left</div>
+            </div>
+            <div class="balance-card type-mc">
+                <div class="balance-number">05</div>
+                <div class="balance-label">MC Taken</div>
+            </div>
+            <div class="balance-card type-el">
+                <div class="balance-number">01</div>
+                <div class="balance-label">EL Taken</div>
+            </div>
+            <div class="balance-card type-cl">
+                <div class="balance-number">00</div>
+                <div class="balance-label">CL Taken</div>
+            </div>
+            <div class="balance-card type-comp">
+                <div class="balance-number">08</div>
+                <div class="balance-label">Comp Hrs</div>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="tabs-row">
+            <div class="tab active">My History</div>
+            <div class="tab">To Approve (1)</div>
+        </div>
+
+        <!-- Leave List -->
+        <div class="card" style="padding: 0;">
+
+            <div class="leave-item">
+                <div class="leave-icon text-brand"><i class="ph-fill ph-palm-tree"></i></div>
+                <div class="leave-details">
+                    <div class="flex-between mb-xs">
+                        <span class="title-sm">Annual Leave</span>
+                        <span class="status-badge pending">Pending</span>
+                    </div>
+                    <div class="body-sm text-secondary mb-xs">
+                        <i class="ph ph-calendar"></i> Jan 20 - Jan 22, 2026
+                    </div>
+                    <div class="body-sm text-tertiary">Session: Full Day (3 days)</div>
+                    <div class="action-btns">
+                        <button class="btn btn-text" style="font-size: 12px; height: 28px;"
+                            onclick="openModal()">Edit</button>
+                        <button class="btn btn-text text-error" style="font-size: 12px; height: 28px;">Withdraw</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="leave-item">
+                <div class="leave-icon" style="color: #7E57C2;"><i class="ph-fill ph-house-line"></i></div>
+                <div class="leave-details">
+                    <div class="flex-between mb-xs">
+                        <span class="title-sm">WFH</span>
+                        <span class="status-badge approved">Approved</span>
+                    </div>
+                    <div class="body-sm text-secondary mb-xs">
+                        <i class="ph ph-calendar"></i> Jan 12, 2026
+                    </div>
+                    <div class="body-sm text-tertiary">Session: Full Day (1 day)</div>
+                </div>
+            </div>
+
+            <div class="leave-item">
+                <div class="leave-icon text-error"><i class="ph-fill ph-first-aid-kit"></i></div>
+                <div class="leave-details">
+                    <div class="flex-between mb-xs">
+                        <span class="title-sm">Medical Certificate</span>
+                        <span class="status-badge approved">Approved</span>
+                    </div>
+                    <div class="body-sm text-secondary mb-xs">
+                        <i class="ph ph-calendar"></i> Jan 05, 2026
+                    </div>
+                    <div class="body-sm text-tertiary">Session: Morning (0.5 days)</div>
+                </div>
+            </div>
+
+            <div class="leave-item">
+                <div class="leave-icon text-warning"><i class="ph-fill ph-warning-circle"></i></div>
+                <div class="leave-details">
+                    <div class="flex-between mb-xs">
+                        <span class="title-sm">Emergency Leave</span>
+                        <span class="status-badge rejected">Rejected</span>
+                    </div>
+                    <div class="body-sm text-secondary mb-xs">
+                        <i class="ph ph-calendar"></i> Dec 15, 2025
+                    </div>
+                    <div class="body-sm text-tertiary">Session: Evening (0.5 days)</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <a href="apply-leave.html" class="fab">
+        <i class="ph ph-plus"></i>
+    </a>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <i class="ph ph-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="attendance.html" class="nav-item">
+            <i class="ph ph-clock-user"></i>
+            <span>Attend</span>
+        </a>
+        <a href="leave.html" class="nav-item active">
+            <i class="ph-fill ph-airplane-tilt"></i> <!-- Fill states applied manually as example-->
+            <span>Leave</span>
+        </a>
+        <a href="announcements.html" class="nav-item">
+            <i class="ph ph-megaphone"></i>
+            <span>News</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="ph ph-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Edit Modal Overlay -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-content text-center">
+            <h2 class="title-lg mb-md">Edit Request</h2>
+            <p class="body-md text-secondary mb-lg">You are about to edit your Pending Annual Leave request. Continue to
+                editor?</p>
+            <div style="display:flex; gap: var(--space-md);">
+                <button class="btn btn-outline" style="flex:1;" onclick="closeModal()">Cancel</button>
+                <a href="apply-leave.html?edit=true" class="btn btn-primary"
+                    style="flex:1; text-decoration: none; display: flex; align-items: center; justify-content: center;">Edit</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        function openModal() { document.getElementById('editModal').classList.add('active'); }
+        function closeModal() { document.getElementById('editModal').classList.remove('active'); }
+    </script>
+</body>
+
+</html>

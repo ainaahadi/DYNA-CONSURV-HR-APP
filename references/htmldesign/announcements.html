@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Announcements</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/global.css">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-md) 0;
+            margin-bottom: var(--space-md);
+        }
+
+        .back-btn {
+            font-size: 24px;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            background: var(--surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            padding: var(--space-xs) var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-xl);
+            box-shadow: var(--shadow-level-1);
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            font-size: var(--body-large);
+            color: var(--text-primary);
+            flex: 1;
+            height: 40px;
+            outline: none;
+        }
+
+        .filter-btn {
+            color: var(--primary-500);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Announcement Cards */
+        .announcement-card {
+            background-color: var(--surface);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-md);
+            box-shadow: var(--shadow-level-1);
+        }
+
+        .announcement-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-md);
+        }
+
+        .announcement-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+            background-color: rgba(74, 144, 226, 0.1);
+            color: var(--primary-500);
+        }
+
+        .announcement-icon.policy {
+            background-color: rgba(255, 167, 38, 0.1);
+            color: var(--warning-500);
+        }
+
+        .announcement-icon.event {
+            background-color: rgba(80, 200, 120, 0.1);
+            color: var(--secondary-500);
+        }
+
+        .announcement-meta {
+            flex: 1;
+            margin-left: var(--space-md);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .tag.urgent {
+            background: rgba(239, 83, 80, 0.1);
+            color: var(--error-500);
+        }
+
+        .announcement-body {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .read-more {
+            display: inline-block;
+            margin-top: var(--space-md);
+            color: var(--primary-500);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: var(--body-md);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-content">
+        <!-- Header -->
+        <header class="page-header">
+            <a href="dashboard.html" class="back-btn"><i class="ph ph-caret-left"></i></a>
+            <h1 class="title-lg">News & Updates</h1>
+            <i class="ph ph-sliders-horizontal" style="font-size: 24px;"></i>
+        </header>
+
+        <!-- Search -->
+        <div class="search-bar">
+            <i class="ph ph-magnifying-glass text-tertiary" style="font-size: 24px;"></i>
+            <input type="text" placeholder="Search announcements...">
+            <i class="ph-fill ph-funnel filter-btn"></i>
+        </div>
+
+        <!-- Announcements List -->
+        <div class="announcement-card">
+            <div class="announcement-header">
+                <div class="announcement-icon event">🎉</div>
+                <div class="announcement-meta">
+                    <span class="tag">General</span>
+                    <h2 class="title-md">Company Wide Holiday Notice</h2>
+                    <span class="label-med text-tertiary">Dec 20, 2025</span>
+                </div>
+            </div>
+            <div class="announcement-body body-md">
+                Please be informed that December 25th will be observed as a paid corporate holiday. All offices will
+                remain closed. Teams working on active client SLA rotations should refer to the on-call schedule posted
+                on the intranet...
+            </div>
+            <a href="#" class="read-more">Read Full Memo</a>
+        </div>
+
+        <div class="announcement-card">
+            <div class="announcement-header">
+                <div class="announcement-icon policy">📋</div>
+                <div class="announcement-meta">
+                    <span class="tag urgent">Important Policy</span>
+                    <h2 class="title-md">FY26 Work From Home Policy</h2>
+                    <span class="label-med text-tertiary">Dec 15, 2025</span>
+                </div>
+            </div>
+            <div class="announcement-body body-md">
+                We are instituting a new limit on remote work starting in Jan FY26. WFH requests are now capped at 3 per
+                month and must be logged 48 hours in advance through the portal. Over-utilization will automatically
+                block the form options...
+            </div>
+            <a href="#" class="read-more">Review Guidelines</a>
+        </div>
+
+        <div class="announcement-card">
+            <div class="announcement-header">
+                <div class="announcement-icon"><i class="ph-fill ph-rocket"></i></div>
+                <div class="announcement-meta">
+                    <span class="tag">Product Update</span>
+                    <h2 class="title-md">New Internal Toolkit Launched</h2>
+                    <span class="label-med text-tertiary">Dec 01, 2025</span>
+                </div>
+            </div>
+            <div class="announcement-body body-md">
+                The IT department has officially deployed the new developer toolkit which can be found in your standard
+                applications folder. Ensure you restart your machines by end of week to receive the patch...
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="flex-center" style="padding: var(--space-xl); color: var(--text-tertiary);">
+            <i class="ph ph-spinner fa-spin" style="font-size: 24px; animation: spin 1s linear infinite;"></i>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <i class="ph ph-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="attendance.html" class="nav-item">
+            <i class="ph ph-clock-user"></i>
+            <span>Attend</span>
+        </a>
+        <a href="leave.html" class="nav-item">
+            <i class="ph ph-airplane-tilt"></i>
+            <span>Leave</span>
+        </a>
+        <a href="announcements.html" class="nav-item active">
+            <i class="ph-fill ph-megaphone"></i>
+            <span>News</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="ph ph-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+    <style>
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</body>
+
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Apply Leave / WFH</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/global.css">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-md) 0;
+            margin-bottom: var(--space-md);
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            z-index: 50;
+        }
+
+        .back-btn {
+            font-size: 24px;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            padding-bottom: var(--space-xl);
+        }
+
+        .form-section {
+            background: var(--surface);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+        }
+
+        select.input-field {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+
+        textarea.input-field {
+            height: auto;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Holiday indicator styling simulation */
+        input[type="date"] {
+            font-family: var(--font-family);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-content">
+        <!-- Header -->
+        <header class="page-header">
+            <a href="leave.html" class="back-btn"><i class="ph ph-caret-left"></i></a>
+            <h1 class="title-lg">Submit Request</h1>
+            <div style="width:24px"></div>
+        </header>
+
+        <form id="leaveForm">
+            <!-- TYPE OF LEAVE -->
+            <div class="form-section">
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label class="input-label" for="leaveType">Leave Type *</label>
+                    <select id="leaveType" class="input-field" required>
+                        <option value="" disabled selected>Select application type</option>
+                        <option value="AL">Annual Leave</option>
+                        <!-- Simulated logic: If WFH balance > 0, show option -->
+                        <option value="WFH" class="wfh-option">Work From Home</option>
+                        <option value="MC">Medical Certificate</option>
+                        <option value="EL">Emergency Leave</option>
+                        <option value="COMP">Comptime</option>
+                    </select>
+                </div>
+
+                <!-- Dynamic Field: Comptime Company -->
+                <div class="input-group hidden" id="companyGroup"
+                    style="margin-top: var(--space-md); margin-bottom: 0;">
+                    <label class="input-label" for="compCompany">Target Company/Project *</label>
+                    <select id="compCompany" class="input-field">
+                        <option value="" disabled selected>Select Target</option>
+                        <option value="A">Internal</option>
+                        <option value="B">Client Alpha</option>
+                        <option value="C">Client Beta</option>
+                    </select>
+                    <small class="text-tertiary" style="font-size: 11px; margin-top:4px; display:block;">Select which
+                        project accounts for this comptime balance.</small>
+                </div>
+            </div>
+
+            <!-- DATE AND SESSION -->
+            <div class="form-section">
+                <h3 class="title-sm mb-md">Timeline</h3>
+
+                <div class="row-2">
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label class="input-label" for="fromDate">From Date *</label>
+                        <input type="date" id="fromDate" class="input-field" required>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label class="input-label" for="fromSession">Session *</label>
+                        <select id="fromSession" class="input-field" required>
+                            <option value="Full Day">Full Day</option>
+                            <option value="Morning">Morning (AM)</option>
+                            <option value="Evening">Evening (PM)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row-2 mt-md" style="margin-top: var(--space-md);">
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label class="input-label" for="toDate">To Date *</label>
+                        <input type="date" id="toDate" class="input-field" required>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label class="input-label" for="toSession">Session *</label>
+                        <select id="toSession" class="input-field" required>
+                            <option value="Full Day">Full Day</option>
+                            <option value="Morning">Morning (AM)</option>
+                            <option value="Evening">Evening (PM)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-md p-sm"
+                    style="margin-top: var(--space-md); background: rgba(74, 144, 226, 0.1); border-radius: var(--radius-sm); padding: var(--space-sm);">
+                    <span class="body-sm text-brand font-weight-bold" style="font-weight: 500;">
+                        <i class="ph ph-info"></i> Standard public holidays will automatically be excluded from
+                        duration.
+                    </span>
+                </div>
+            </div>
+
+            <!-- REASON -->
+            <div class="form-section">
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label class="input-label" for="reason">Reason / Justification *</label>
+                    <textarea id="reason" class="input-field" placeholder="Provide details for your request..." required
+                        minlength="10" maxlength="500"></textarea>
+                    <div style="text-align: right; margin-top: 4px;" class="label-med text-tertiary">Min 10 chars</div>
+                </div>
+            </div>
+
+            <!-- SUBMIT -->
+            <button type="submit" id="submitBtn" class="btn btn-primary" style="margin-top: var(--space-sm);">
+                SUBMIT REQUEST
+            </button>
+        </form>
+    </div>
+
+    <!-- Scripts to handle the dynamic interactions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('leaveForm');
+            const leaveType = document.getElementById('leaveType');
+            const companyGroup = document.getElementById('companyGroup');
+            const compCompany = document.getElementById('compCompany');
+            const fromDate = document.getElementById('fromDate');
+            const toDate = document.getElementById('toDate');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Mock Balance Check for WFH Option (assume user has 0 balance for demo logic test)
+            const wfhBalance = 3; // Change to 0 to test hiding
+            if (wfhBalance <= 0) {
+                const wfhOption = document.querySelector('.wfh-option');
+                if (wfhOption) wfhOption.remove();
+            }
+
+            // Show/Hide Comptime logic
+            leaveType.addEventListener('change', (e) => {
+                if (e.target.value === 'COMP') {
+                    companyGroup.classList.remove('hidden');
+                    compCompany.setAttribute('required', 'true');
+                } else {
+                    companyGroup.classList.add('hidden');
+                    compCompany.removeAttribute('required');
+                }
+            });
+
+            // Date validation (To Date >= From Date)
+            fromDate.addEventListener('change', (e) => {
+                toDate.min = e.target.value;
+                if (!toDate.value) toDate.value = e.target.value; // Auto fill matching date
+            });
+
+            // Form Submit Logic (Safeguard)
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // Double Submit Protection mechanism
+                submitBtn.disabled = true;
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="ph ph-spinner fa-spin"></i> Processing...';
+
+                // Mock API delay
+                setTimeout(() => {
+                    alert('Leave Request Submitted Successfully!');
+                    window.location.href = 'leave.html';
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+
+</html>

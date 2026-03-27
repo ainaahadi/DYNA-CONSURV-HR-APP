@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Attendance</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/global.css">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-md) 0;
+            margin-bottom: var(--space-md);
+        }
+
+        .back-btn {
+            font-size: 24px;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .status-hero {
+            background: linear-gradient(135deg, var(--secondary-500), #38a35d);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl) var(--space-md);
+            color: white;
+            text-align: center;
+            margin-bottom: var(--space-lg);
+            box-shadow: var(--shadow-level-2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-hero::after {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-full);
+            pointer-events: none;
+        }
+
+        .status-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-sm);
+            font-size: 32px;
+        }
+
+        .qr-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: var(--space-xl) var(--space-md);
+        }
+
+        .qr-illustration {
+            font-size: 64px;
+            color: var(--primary-500);
+            margin-bottom: var(--space-sm);
+        }
+
+        .filter-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .dropdown {
+            background: var(--surface);
+            border: 1px solid var(--border-subtle);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-family);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: flex-start;
+            padding: var(--space-md) 0;
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .date-box {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            padding: var(--space-xs);
+            text-align: center;
+            min-width: 60px;
+            margin-right: var(--space-md);
+        }
+
+        .history-details {
+            flex: 1;
+        }
+
+        .time-row {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            margin: 4px 0;
+            color: var(--text-secondary);
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-indicator.complete {
+            color: var(--secondary-500);
+        }
+
+        .status-indicator.halfday {
+            color: var(--warning-500);
+        }
+
+        .status-indicator.absent {
+            color: var(--error-500);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-content">
+        <!-- Header -->
+        <header class="page-header">
+            <a href="dashboard.html" class="back-btn"><i class="ph ph-caret-left"></i></a>
+            <h1 class="title-lg">Attendance</h1>
+            <i class="ph ph-dots-three-vertical" style="font-size: 24px;"></i>
+        </header>
+
+        <!-- Status Hero -->
+        <div class="status-hero">
+            <div class="status-icon">
+                <i class="ph-bold ph-check"></i>
+            </div>
+            <h2 class="title-lg mb-xs">Checked In</h2>
+            <p class="body-lg mb-md" style="opacity: 0.9;">Since 09:00 AM &bull; Duration: 6h 30m</p>
+            <button class="btn btn-primary" style="background: white; color: var(--secondary-500);"
+                onclick="alert('Checkout process initiated.')">
+                CHECK OUT
+            </button>
+        </div>
+
+        <!-- Scan QR Card -->
+        <div class="card qr-card">
+            <i class="ph ph-qr-code qr-illustration"></i>
+            <h3 class="title-md mb-xs">Scan QR Code</h3>
+            <p class="body-md text-secondary mb-md">Align the office QR code within the frame to mark your attendance
+                manually.</p>
+            <a href="qr-scanner.html" class="btn btn-outline"
+                style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                SCAN QR CODE
+            </a>
+        </div>
+
+        <!-- History List -->
+        <div class="filter-row">
+            <h3 class="title-md">This Month</h3>
+            <select class="dropdown">
+                <option>Jan 2026</option>
+                <option>Dec 2025</option>
+                <option>Nov 2025</option>
+            </select>
+        </div>
+
+        <div class="card" style="padding: 0 var(--space-md);">
+            <div class="history-item">
+                <div class="date-box">
+                    <div class="label-med text-tertiary">JAN</div>
+                    <div class="title-lg">14</div>
+                </div>
+                <div class="history-details">
+                    <div class="flex-between">
+                        <span class="title-sm">Regular Shift</span>
+                        <span class="status-indicator complete body-sm font-weight-bold"><i
+                                class="ph-fill ph-check-circle"></i> Complete</span>
+                    </div>
+                    <div class="time-row body-sm">
+                        <i class="ph ph-clock"></i> In: 09:00 AM &bull; Out: 06:00 PM
+                    </div>
+                    <div class="label-med text-tertiary mt-xs">Duration: 8h 30m &bull; Office</div>
+                </div>
+            </div>
+
+            <div class="history-item">
+                <div class="date-box">
+                    <div class="label-med text-tertiary">JAN</div>
+                    <div class="title-lg">13</div>
+                </div>
+                <div class="history-details">
+                    <div class="flex-between">
+                        <span class="title-sm">Regular Shift</span>
+                        <span class="status-indicator complete body-sm font-weight-bold"><i
+                                class="ph-fill ph-check-circle"></i> Complete</span>
+                    </div>
+                    <div class="time-row body-sm">
+                        <i class="ph ph-clock"></i> In: 08:45 AM &bull; Out: 05:45 PM
+                    </div>
+                    <div class="label-med text-tertiary mt-xs">Duration: 8h 30m &bull; Office</div>
+                </div>
+            </div>
+
+            <div class="history-item">
+                <div class="date-box">
+                    <div class="label-med text-tertiary">JAN</div>
+                    <div class="title-lg">12</div>
+                </div>
+                <div class="history-details">
+                    <div class="flex-between">
+                        <span class="title-sm">Half Day</span>
+                        <span class="status-indicator halfday body-sm font-weight-bold"><i
+                                class="ph-fill ph-warning-circle"></i> Half Day</span>
+                    </div>
+                    <div class="time-row body-sm">
+                        <i class="ph ph-clock"></i> In: 09:00 AM &bull; Out: 01:00 PM
+                    </div>
+                    <div class="label-med text-tertiary mt-xs">Duration: 4h 00m &bull; Office</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <i class="ph ph-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="attendance.html" class="nav-item active">
+            <i class="ph ph-clock-user"></i>
+            <span>Attend</span>
+        </a>
+        <a href="leave.html" class="nav-item">
+            <i class="ph ph-airplane-tilt"></i>
+            <span>Leave</span>
+        </a>
+        <a href="announcements.html" class="nav-item">
+            <i class="ph ph-megaphone"></i>
+            <span>News</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="ph ph-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,93 @@
+:root {
+  /* Color Palette - Light Mode */
+  --primary-500: #4A90E2;      /* Main Ocean Blue */
+  --primary-700: #2E5C8A;      /* Dark Blue */
+  --primary-300: #7AB4F5;      /* Light Blue */
+  
+  --secondary-500: #50C878;    /* Emerald Green / Success */
+  --warning-500: #FFA726;      /* Orange */
+  --error-500: #EF5350;        /* Red */
+  --info-500: #29B6F6;         /* Light Blue info */
+
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F5F7FA;
+  --bg-tertiary: #E8EDF2;
+  --surface: #FFFFFF;
+
+  --text-primary: rgba(26, 26, 26, 0.9);
+  --text-secondary: rgba(102, 102, 102, 0.9);
+  --text-tertiary: rgba(153, 153, 153, 0.9);
+  
+  --border-subtle: #E0E0E0;
+  --divider: #F0F0F0;
+
+  /* Shadows */
+  --shadow-level-1: 0px 1px 3px rgba(0,0,0,0.12);
+  --shadow-level-2: 0px 2px 6px rgba(0,0,0,0.16);
+  --shadow-level-3: 0px 4px 12px rgba(0,0,0,0.20);
+  --shadow-level-4: 0px 8px 24px rgba(0,0,0,0.24);
+
+  /* Typography Scales */
+  --font-family: 'SF Pro', 'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --display-large: 32px;
+  --display-med: 28px;
+  --display-small: 24px;
+  --title-large: 22px;
+  --title-med: 18px;
+  --title-small: 16px;
+  --body-large: 16px;
+  --body-med: 14px;
+  --body-small: 12px;
+  --label-large: 14px;
+  --label-med: 12px;
+
+  /* Spacing Grid (8dp base) */
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  /* Border Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --trans-fast: 150ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  --trans-normal: 250ms cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Dark Mode Overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-500: #5FA3F5; 
+    --primary-700: #7AB4F5; 
+    --primary-300: #4A90E2; 
+
+    --secondary-500: #66D98A;
+    --warning-500: #FFB84D;
+    --error-500: #F77270;
+
+    --bg-primary: #121212;
+    --bg-secondary: #1E1E1E;
+    --bg-tertiary: #2A2A2A;
+    --surface: #1E1E1E;
+
+    --text-primary: rgba(255, 255, 255, 0.9);
+    --text-secondary: rgba(176, 176, 176, 0.9);
+    --text-tertiary: rgba(128, 128, 128, 0.9);
+
+    --border-subtle: #333333;
+    --divider: #2A2A2A;
+
+    --shadow-level-1: 0px 1px 3px rgba(0,0,0,0.3);
+    --shadow-level-2: 0px 2px 6px rgba(0,0,0,0.4);
+    --shadow-level-3: 0px 4px 12px rgba(0,0,0,0.5);
+  }
+}

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QR Scanner</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/global.css">
+    <style>
+        body {
+            background-color: #000;
+            color: white;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .camera-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80') center/cover;
+            filter: blur(2px) brightness(0.6);
+            z-index: 0;
+        }
+
+        .scanner-ui {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: var(--space-lg);
+        }
+
+        .scanner-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: auto;
+        }
+
+        .icon-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-full);
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            backdrop-filter: blur(5px);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .scan-frame-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: auto;
+        }
+
+        .scan-frame {
+            width: 250px;
+            height: 250px;
+            position: relative;
+            margin-bottom: var(--space-xl);
+        }
+
+        .corner {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-color: var(--primary-500);
+            border-style: solid;
+            transition: all var(--trans-fast);
+        }
+
+        .corner.tl {
+            top: 0;
+            left: 0;
+            border-width: 4px 0 0 4px;
+            border-top-left-radius: 12px;
+        }
+
+        .corner.tr {
+            top: 0;
+            right: 0;
+            border-width: 4px 4px 0 0;
+            border-top-right-radius: 12px;
+        }
+
+        .corner.bl {
+            bottom: 0;
+            left: 0;
+            border-width: 0 0 4px 4px;
+            border-bottom-left-radius: 12px;
+        }
+
+        .corner.br {
+            bottom: 0;
+            right: 0;
+            border-width: 0 4px 4px 0;
+            border-bottom-right-radius: 12px;
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 5%;
+            right: 5%;
+            height: 2px;
+            background: var(--primary-500);
+            box-shadow: 0 0 8px var(--primary-500);
+            animation: scan 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes scan {
+            0% {
+                top: 5%;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                top: 95%;
+                opacity: 0;
+            }
+        }
+
+        /* Pulse animation for corners */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                border-color: var(--primary-500);
+            }
+
+            50% {
+                transform: scale(1.05);
+                border-color: var(--primary-300);
+            }
+
+            100% {
+                transform: scale(1);
+                border-color: var(--primary-500);
+            }
+        }
+
+        .scan-frame {
+            animation: pulse 2s infinite;
+        }
+
+        .scanner-footer {
+            margin-top: auto;
+        }
+
+        .manual-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        /* Success Overlay */
+        .success-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--secondary-500);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .success-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .success-circle {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin-bottom: var(--space-md);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="camera-container"></div>
+
+    <div class="scanner-ui">
+        <header class="scanner-header">
+            <a href="attendance.html" class="icon-btn"><i class="ph ph-x"></i></a>
+            <button class="icon-btn" id="flashToggle"><i class="ph ph-lightning"></i></button>
+        </header>
+
+        <div class="scan-frame-container">
+            <div class="scan-frame" id="scanFrame">
+                <div class="corner tl"></div>
+                <div class="corner tr"></div>
+                <div class="corner bl"></div>
+                <div class="corner br"></div>
+                <div class="scan-line"></div>
+            </div>
+            <p class="title-md text-center" style="font-weight: 500; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Align QR
+                code within frame</p>
+        </div>
+
+        <div class="scanner-footer">
+            <button class="btn manual-btn label-lg" style="width: 100%; height: 56px; border-radius: var(--radius-md);"
+                onclick="triggerSuccess()">
+                ENTER CODE MANUALLY
+            </button>
+        </div>
+    </div>
+
+    <!-- Success Overlay -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-circle">
+            <i class="ph-bold ph-check"></i>
+        </div>
+        <h2 class="display-sm mb-xs">Success!</h2>
+        <p class="body-lg">Attendance Marked</p>
+    </div>
+
+    <script>
+        // Toggle flash icon
+        const flashBtn = document.getElementById('flashToggle');
+        flashBtn.addEventListener('click', () => {
+            const icon = flashBtn.querySelector('i');
+            if (icon.classList.contains('ph-lightning')) {
+                icon.classList.replace('ph-lightning', 'ph-lightning-slash');
+            } else {
+                icon.classList.replace('ph-lightning-slash', 'ph-lightning');
+            }
+        });
+
+        // Mock success flow
+        function triggerSuccess() {
+            const overlay = document.getElementById('successOverlay');
+            overlay.classList.add('show');
+            setTimeout(() => {
+                window.location.href = 'attendance.html';
+            }, 1500);
+        }
+
+        // Auto trigger success after a few seconds for prototype purposes
+        setTimeout(triggerSuccess, 4000);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,324 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
+@import './variables.css';
+
+/* CSS Reset & Global Layout */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+
+    /* Mobile app constraints */
+    max-width: 500px;
+    /* Constrain on desktop browsers */
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Typography Base Classes */
+.display-lg {
+    font-size: var(--display-large);
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.display-md {
+    font-size: var(--display-med);
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.title-lg {
+    font-size: var(--title-large);
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.title-md {
+    font-size: var(--title-med);
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.title-sm {
+    font-size: var(--title-small);
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.body-lg {
+    font-size: var(--body-large);
+    font-weight: 400;
+}
+
+.body-md {
+    font-size: var(--body-med);
+    font-weight: 400;
+}
+
+.label-lg {
+    font-size: var(--label-large);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Reusable Components */
+
+/* Cards */
+.card {
+    background-color: var(--surface);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    box-shadow: var(--shadow-level-1);
+    border: 1px solid var(--border-subtle);
+    margin-bottom: var(--space-md);
+    transition: box-shadow var(--trans-fast), transform var(--trans-fast);
+}
+
+.card:active {
+    transform: scale(0.98);
+}
+
+.card-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+    .card-glass {
+        background: rgba(30, 30, 30, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    transition: all var(--trans-fast);
+}
+
+.btn-primary {
+    background-color: var(--primary-500);
+    color: #FFFFFF;
+    height: 48px;
+    padding: 0 var(--space-lg);
+    border-radius: var(--radius-sm);
+    font-size: var(--label-large);
+    font-weight: 600;
+    width: 100%;
+    box-shadow: var(--shadow-level-1);
+}
+
+.btn-primary:active {
+    transform: scale(0.96);
+    background-color: var(--primary-700);
+}
+
+.btn-primary:disabled {
+    background-color: var(--border-subtle);
+    color: var(--text-tertiary);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-outline {
+    height: 48px;
+    padding: 0 var(--space-lg);
+    border: 2px solid var(--primary-500);
+    background: transparent;
+    color: var(--primary-500);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    width: 100%;
+}
+
+.btn-outline:active {
+    transform: scale(0.96);
+    background-color: rgba(74, 144, 226, 0.1);
+}
+
+.btn-text {
+    background: transparent;
+    color: var(--primary-500);
+    height: 40px;
+    font-weight: 500;
+}
+
+.btn-text:active {
+    background-color: rgba(74, 144, 226, 0.1);
+    border-radius: var(--radius-xs);
+}
+
+/* Inputs */
+.input-group {
+    margin-bottom: var(--space-md);
+    position: relative;
+}
+
+.input-field {
+    width: 100%;
+    height: 56px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: var(--space-md);
+    font-size: var(--body-large);
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    transition: border-color var(--trans-fast);
+    outline: none;
+}
+
+.input-field:focus {
+    border-color: var(--primary-500);
+    border-width: 2px;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: var(--space-xs);
+    font-size: var(--body-med);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Utilities */
+.text-primary {
+    color: var(--text-primary);
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+.text-tertiary {
+    color: var(--text-tertiary);
+}
+
+.text-brand {
+    color: var(--primary-500);
+}
+
+.text-success {
+    color: var(--secondary-500);
+}
+
+.text-warning {
+    color: var(--warning-500);
+}
+
+.text-error {
+    color: var(--error-500);
+}
+
+.mb-xs {
+    margin-bottom: var(--space-xs);
+}
+
+.mb-sm {
+    margin-bottom: var(--space-sm);
+}
+
+.mb-md {
+    margin-bottom: var(--space-md);
+}
+
+.mb-lg {
+    margin-bottom: var(--space-lg);
+}
+
+.mb-xl {
+    margin-bottom: var(--space-xl);
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main App Container (for padding with bottom nav) */
+.app-content {
+    flex: 1;
+    padding: var(--space-lg) var(--space-md);
+    padding-bottom: 90px;
+    /* Space for bottom nav */
+    overflow-y: auto;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background-color: var(--surface);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+    /* Constrain on desktop */
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--text-tertiary);
+    font-size: var(--label-med);
+    padding: var(--space-xs);
+    flex: 1;
+    transition: color var(--trans-fast);
+}
+
+.nav-item i {
+    font-size: 24px;
+    margin-bottom: 2px;
+}
+
+.nav-item.active {
+    color: var(--primary-500);
+}
+
+.nav-item.active i {
+    font-weight: bold;
+    /* Assume using icon font that supports weight, or fill variants */
+}

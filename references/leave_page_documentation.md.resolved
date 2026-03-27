@@ -1,0 +1,59 @@
+# Leave Page Functionality ([leave.pug](file:///d:/dynaconsurvportal/views/leave.pug))
+
+The Leave Page serves as the primary portal for employees to view their leave balances, track their historical requests, submit new applications for paid time off or remote work, and manage pending requests. The interface relies on robust front-end validation and interactive calendar features to assist the user.
+
+Below is a detailed breakdown of the functionality available to the user.
+
+---
+
+## 1. Dashboard: Viewing Leave Balances
+At the top of the page, users are presented with a summary dashboard for the current year. This dashboard provides immediate insight into their available and utilized leave balances.
+
+- **AL (Annual Leave) Left:** Highlights the remaining Annual Leave days available to the user. Calculated dynamically factoring in already taken days.
+- **WFH (Work From Home) Monthly Left:** Shows the remaining balance of remote work allocations for the current month.
+- **MC (Medical Certificate) Taken:** Accumulates the total number of sick leave days used in the year.
+- **EL (Emergency Leave) Taken:** Tracks unpredictable/emergency leave days taken so far.
+- **CL (Compassionate Leave) Taken:** Tracks the number of days taken for bereavement or compassionate reasons.
+- **Comptime Hour:** Shows an active balance of compensable overtime hours built up (registered minus claimed).
+
+## 2. Leave / WFH History Table
+Users can review a comprehensive history of the requests they have generated during the current year.
+
+- **Displayed Data:** Date(s) of the leave, total duration, type of submission, submitted reason, current status (e.g., Pending, Approved, Rejected), and user actions.
+- **Dynamic Updates:** The table is re-rendered dynamically when new requests are processed without needing a full page reload.
+
+## 3. Submitting New Applications (Submission Form)
+A central form exists for users to submit new leave or WFH requests. This is tightly integrated with the calendar features.
+
+### A. Leave Selection Criteria
+- **Leave Type Dropdown:** Users select what kind of leave they are applying for (Annual Leave, WFH, Comptime, Medical, etc.).
+- **Automatic Restrictions:** If a user's monthly WFH balance is `0`, the "WFH" option is intelligently hidden/disabled in this dropdown so they cannot over-utilize it.
+- **Comptime Company Selection:** If "Comptime" is selected, a secondary dropdown ("Company") appears dynamically, enforcing the user to map their compensatory time off to a specific client or company structure. 
+- **Reason Input:** A large text area for mandatory justifications.
+
+### B. Calendar and Date Features 
+The frontend utilizes a localized DatePicker (often powered by a library like Flatpickr or jQuery UI) tied closely to JavaScript functions.
+- **Interactive Popup Calendars:** Clicking on the "From" and "To" input fields opens a visual calendar interface to navigate months and click specific days.
+- **Session Parsing:** By selecting dates, users must also define the session modifier:
+  - `Full Day`
+  - `Morning` (Half Day - A.M. block)
+  - `Evening` (Half Day - P.M. block)
+  - The interface tracks whether start and end times match to calculate standard workday duration.
+- **Holiday Data Loading ([loadHolidays](file:///d:/dynaconsurvportal/public/javascripts/main.js#875-887)):** Before initializing the calendar dates, the script automatically fetches public holiday data. The calendar uses this data array to visually lock or gray-out corporate holidays, preventing the user from accidentally requesting leave on a non-working day.
+- **Re-initialization Rules ([reinitializeDatePickers](file:///d:/dynaconsurvportal/public/javascripts/main.js#1214-1220)):** The date interfaces restrict invalid selections. For instance, selecting a "From" date will automatically lock the "To" date calendar from picking anything prior to the chosen start date. 
+
+## 4. Editing and Withdrawing Applications
+As long as a request has not been firmly processed (such as remaining in "Pending" status), the user can invoke interactive modals.
+
+- **Edit Leave Modal:** Opens an overlay pre-populated with the target application's details. The user can adjust the `Reason`, `From` dates/sessions, and [To](file:///d:/dynaconsurvportal/public/javascripts/main.js#899-906) dates/sessions, saving the changes back to the server.
+- **Delete Confirmation Modal:** Protects against accidental deletion. Tapping "Delete" flags a secondary "Are you sure?" modal before committing the removal to the database.
+
+## 5. Management Action: Leave to Approve Section
+Hidden by default, this section becomes visible dynamically depending on the user's role (i.e., if they have subordinates).
+
+- **Approval Queue Table:** Shows applications submitted by reporting staff members.
+- **Information Included:** Staff Name, Date range, Duration, Leave Type, and User Reason.
+- **Interactive Actions:** Direct inline buttons to explicitly `Approve` or `Reject` the parsed applications seamlessly directly from the centralized dashboard.
+
+## 6. Real-time Process Safeguards
+- **Double Submit Constraints:** Upon submitting an application or saving edited changes, the "Submit" or "Proceed" buttons are programmatically disabled for 3 seconds. This prevents server errors or duplicated Leave entires stemming from eager clicking.
